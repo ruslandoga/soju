@@ -1,6 +1,7 @@
 defmodule Soju.Repo.Migrations.AddJobs do
   use Ecto.Migration
 
+  # TODO
   def change do
     create table(:soju_jobs, primary_key: false) do
       add :id, :binary, primary_key: true, null: false
