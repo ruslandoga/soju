@@ -1,18 +1,28 @@
 defmodule Sm do
-  @moduledoc """
-  Documentation for `Sm`.
-  """
+  @moduledoc File.read!("README.md")
+  use Supervisor
 
-  @doc """
-  Hello world.
+  def start_link(init_arg) do
+    Supervisor.start_link(__MODULE__, init_arg, name: __MODULE__)
+  end
 
-  ## Examples
+  alias Sm.Queue
 
-      iex> Sm.hello()
-      :world
+  @impl true
+  def init(_init_arg) do
+    task_sup = __MODULE__.TaskSupervisor
 
-  """
-  def hello do
-    :world
+    children = [
+      # TODO get repo from caller?
+      Sm.Repo,
+      {Task.Supervisor, name: task_sup},
+      {Queue, task_sup: task_sup}
+    ]
+
+    Supervisor.init(children, strategy: :one_for_one)
+  end
+
+  def schedule(job) do
+    Queue.schedule(job)
   end
 end
