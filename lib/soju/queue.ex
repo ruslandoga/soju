@@ -19,6 +19,12 @@ defmodule Soju.Queue do
     {:ok, task_sup, {:continue, :poll}}
   end
 
+  defmacrop json_insert(json, at, value) do
+    quote do
+      fragment("json_insert(?, ?, ?)", unquote(json), unquote(at), unquote(value))
+    end
+  end
+
   @impl true
   def handle_continue(:poll, task_sup) do
     # poll for jobs in db and try executing available ones
@@ -49,11 +55,7 @@ defmodule Soju.Queue do
 
       Job
       |> where(id: ^job.id)
-      |> update(
-        set: [
-          errors: fragment("json_append(?, errors)", ^reason)
-        ]
-      )
+      |> update([j], set: [errors: json_insert(j.error, "$[#]", ^reason)])
       |> Repo.update_all(set: [status: 0, scheduled_at: next_scheduled_at])
     end)
 
