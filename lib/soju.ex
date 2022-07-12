@@ -1,4 +1,4 @@
-defmodule Sm do
+defmodule Soju do
   @moduledoc File.read!("README.md")
   use Supervisor
 
@@ -6,7 +6,7 @@ defmodule Sm do
     Supervisor.start_link(__MODULE__, init_arg, name: __MODULE__)
   end
 
-  alias Sm.Queue
+  alias Soju.Queue
 
   @impl true
   def init(_init_arg) do
@@ -14,7 +14,7 @@ defmodule Sm do
 
     children = [
       # TODO get repo from caller?
-      Sm.Repo,
+      Soju.Repo,
       {Task.Supervisor, name: task_sup},
       {Queue, task_sup: task_sup}
     ]

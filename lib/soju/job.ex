@@ -1,4 +1,4 @@
-defmodule Sm.Job do
+defmodule Soju.Job do
   @moduledoc false
   use Ecto.Schema
 

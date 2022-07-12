@@ -1,4 +1,4 @@
-defmodule Sm.Repo.Migrations.AddJobs do
+defmodule Soju.Repo.Migrations.AddJobs do
   use Ecto.Migration
 
   def change do

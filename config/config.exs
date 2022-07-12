@@ -1,3 +1,3 @@
 import Config
 
-config :salaryman, ecto_repos: [Sm.Repo]
+config :soju, ecto_repos: [Soju.Repo]

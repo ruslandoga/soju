@@ -1,9 +1,9 @@
-defmodule Sm.Queue do
+defmodule Soju.Queue do
   @moduledoc false
   use GenServer
 
   import Ecto.{Query, Changeset}
-  alias Sm.{Repo, Job}
+  alias Soju.{Repo, Job}
 
   def start_link(opts) do
     GenServer.start_link(__MODULE__, opts, name: __MODULE__)
@@ -136,10 +136,10 @@ end
 
 defmodule DemoJob do
   @moduledoc false
-  use Sm.Worker
+  use Soju.Worker
 
   @impl true
-  def perform(%Sm.Job{args: args}) do
+  def perform(%Soju.Job{args: args}) do
     IO.inspect(args, label: "DemoJob.args")
     :ok
   end
