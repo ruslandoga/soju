@@ -20,6 +20,10 @@ defmodule Sm.MixProject do
 
   # Run "mix help deps" to learn about dependencies.
   defp deps do
-    []
+    [
+      {:ecto_sqlite3, "~> 0.7.3"},
+      {:bigflake, "~> 0.5.0"},
+      {:jason, "~> 1.3"}
+    ]
   end
 end
