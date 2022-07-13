@@ -9,10 +9,6 @@ defmodule Soju.Queue do
     GenServer.start_link(__MODULE__, opts, name: __MODULE__)
   end
 
-  def schedule(%Job{} = job) do
-    GenServer.call(__MODULE__, {:schedule, job})
-  end
-
   @impl true
   def init(opts) do
     task_sup = Keyword.fetch!(opts, :task_sup)
@@ -22,6 +18,12 @@ defmodule Soju.Queue do
   defmacrop json_insert(json, at, value) do
     quote do
       fragment("json_insert(?, ?, ?)", unquote(json), unquote(at), unquote(value))
+    end
+  end
+
+  defmacrop json_append(json, value) do
+    quote do
+      json_insert(unquote(json), "$[#]", unquote(value))
     end
   end
 
@@ -55,7 +57,7 @@ defmodule Soju.Queue do
 
       Job
       |> where(id: ^job.id)
-      |> update([j], set: [errors: json_insert(j.error, "$[#]", ^reason)])
+      |> update([j], set: [errors: json_append(j.error, ^reason)])
       |> Repo.update_all(set: [status: 0, scheduled_at: next_scheduled_at])
     end)
 

@@ -6,7 +6,7 @@ defmodule Soju do
     Supervisor.start_link(__MODULE__, init_arg, name: __MODULE__)
   end
 
-  alias Soju.Queue
+  alias Soju.{Queue, Job}
 
   @impl true
   def init(_init_arg) do
@@ -22,7 +22,7 @@ defmodule Soju do
     Supervisor.init(children, strategy: :one_for_one)
   end
 
-  def schedule(job) do
-    Queue.schedule(job)
+  def schedule(%Job{} = job) do
+    GenServer.call(Queue, {:schedule, job})
   end
 end
